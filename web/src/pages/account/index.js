@@ -32,9 +32,16 @@ import {
   HStack,
   Image,
 } from "@chakra-ui/react"
+import React, { useState } from "react";
 
 import Cookie from "../../svg/cookie.svg"
 import BackPack from "../../svg/backpack.svg"
+
+function useInput({ type /*...*/ }) {
+  const [value, setValue] = useState("");
+  const input = <input value={value} onChange={e => setValue(e.target.value)} type={type} />;
+  return [value, input];
+}
 
 export function MarketItemsCount() {
   let l = 0
@@ -57,11 +64,15 @@ export function StoreItemsCount() {
 
 export function MintButton({address}) {
   const items = useAccountItems(address)
+  const [mintTypeId, mintTypeInput] = useInput({ type: "text" });
 
   return (
-    <Button disabled={items.status !== IDLE} onClick={items.mint}>
+    <>
+    {mintTypeInput}
+    <Button disabled={items.status !== IDLE} onClick={items.mint(mintTypeId)}>
       Mint Item
     </Button>
+    </>
   )
 }
 

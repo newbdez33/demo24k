@@ -27,5 +27,4 @@ yarn-error.log*
 .exrc
 .eslintcache
 .idea/
-api/dist/*
 

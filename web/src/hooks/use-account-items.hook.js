@@ -23,7 +23,7 @@ export function useAccountItems(address) {
     ids: items,
     status,
 
-    async mint(tid) {
+    async mint() {
       setStatus(PROCESSING)
       await fetch(process.env.REACT_APP_API_KITTY_ITEM_MINT, {
         method: "POST",
@@ -33,7 +33,7 @@ export function useAccountItems(address) {
         body: JSON.stringify({
           recipient: address,
           // Random typeID between 1 - 5
-          typeID: parseInt(tid),  //Math.floor(Math.random() * (5 - 1)) + 1
+          typeID: Math.floor(Math.random() * (5 - 1)) + 1,
         }),
       })
       await fetchAccountItems(address).then(setItems)

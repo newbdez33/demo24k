@@ -32,7 +32,6 @@ import {
   HStack,
   Image,
 } from "@chakra-ui/react"
-
 import Cookie from "../../svg/cookie.svg"
 import BackPack from "../../svg/backpack.svg"
 
@@ -55,13 +54,14 @@ export function StoreItemsCount() {
   return l > 0 ? <Tag ml="1">{l}</Tag> : null
 }
 
-export function MintButton({address}) {
+export function MintButton({address, i}) {
   const items = useAccountItems(address)
-
   return (
-    <Button disabled={items.status !== IDLE} onClick={items.mint}>
-      Mint Item
+    <>
+    <Button disabled={items.status !== IDLE} onClick={() => {items.mint(i)}}>
+      Mint Type {i}
     </Button>
+    </>
   )
 }
 
@@ -145,7 +145,21 @@ export function Page() {
           {cu.addr === address && (
             <Box ml="4">
               <Suspense fallback={null}>
-                <MintButton address={address} />
+                <MintButton address={address} i={1} />
+                &nbsp;
+                <MintButton address={address} i={2} />
+                &nbsp;
+                <MintButton address={address} i={3} />
+                &nbsp;
+                <MintButton address={address} i={4} />
+                &nbsp;
+                <MintButton address={address} i={5} />
+                &nbsp;
+                <MintButton address={address} i={6} />
+                &nbsp;
+                <MintButton address={address} i={7} />
+                &nbsp;
+                <MintButton address={address} i={8} />
               </Suspense>
             </Box>
           )}

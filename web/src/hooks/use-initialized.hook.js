@@ -17,6 +17,7 @@ import {initializeAccount} from "../flow/initialize-account.tx"
 import {sleep} from "../util/sleep"
 import {useFlowBalance} from "./use-flow-balance.hook"
 import {useKibblesBalance} from "./use-kibbles-balance.hook"
+import {useKaratsBalance} from "./use-karats-balance.hook"
 
 export const $status = atomFamily({
   key: "init::status",
@@ -35,7 +36,7 @@ export const $computedInit = selectorFamily({
   key: "init::computed",
   get: address => async ({get}) => {
     const all = get($init(address))
-    return all.Kibble && all.KittyItems && all.KittyItemsMarket
+    return all.Karat && all.Kibble && all.KittyItems && all.KittyItemsMarket
   },
 })
 
@@ -45,6 +46,7 @@ export function useInitialized(address) {
   const [status, setStatus] = useRecoilState($status(address))
   const flow = useFlowBalance(address)
   const kibble = useKibblesBalance(address)
+  const karat = useKaratsBalance(address)
 
   function recheck() {
     isAccountInitialized(address).then(setInit)
@@ -64,6 +66,7 @@ export function useInitialized(address) {
           recheck()
           flow.refresh()
           kibble.refresh()
+          karat.refresh()
           setStatus(SUCCESS)
         },
         onError() {

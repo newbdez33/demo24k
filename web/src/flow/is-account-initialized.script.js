@@ -5,6 +5,7 @@ const CODE = cdc`
   import FungibleToken from 0xFungibleToken
   import NonFungibleToken from 0xNonFungibleToken
   import Kibble from 0xKibble
+  import Karat from 0xKarat
   import KittyItems from 0xKittyItems
   import KittyItemsMarket from 0xKittyItemsMarket
 
@@ -15,6 +16,18 @@ const CODE = cdc`
 
     let balance: Bool = getAccount(address)
       .getCapability<&Kibble.Vault{FungibleToken.Balance}>(Kibble.BalancePublicPath)
+      .check()
+
+    return receiver && balance
+  }
+
+  pub fun hasKarat(_ address: Address): Bool {
+    let receiver: Bool = getAccount(address)
+      .getCapability<&Karat.Vault{FungibleToken.Receiver}>(Karat.ReceiverPublicPath)
+      .check()
+
+    let balance: Bool = getAccount(address)
+      .getCapability<&Karat.Vault{FungibleToken.Balance}>(Karat.BalancePublicPath)
       .check()
 
     return receiver && balance
@@ -34,6 +47,7 @@ const CODE = cdc`
 
   pub fun main(address: Address): {String: Bool} {
     let ret: {String: Bool} = {}
+    ret["Karat"] = hasKarat(address)
     ret["Kibble"] = hasKibble(address)
     ret["KittyItems"] = hasKittyItems(address)
     ret["KittyItemsMarket"] = hasKittyItemsMarket(address)

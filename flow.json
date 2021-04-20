@@ -6,6 +6,7 @@
     }
   },
   "contracts": {
+    "Karat": "./cadence/contracts/Karat.cdc",
     "Kibble": "./cadence/contracts/Kibble.cdc",
     "KittyItems": "./cadence/contracts/KittyItems.cdc",
     "KittyItemsMarket": "./cadence/contracts/KittyItemsMarket.cdc",
@@ -46,6 +47,7 @@
   "deployments": {
     "testnet": {
       "testnet-account": [
+        "Karat",
         "Kibble",
         "KittyItems",
         "KittyItemsMarket"
@@ -53,6 +55,7 @@
     },
     "emulator": {
       "emulator-account": [
+        "Karat",
         "Kibble",
         "KittyItems",
         "KittyItemsMarket",

@@ -1,9 +1,11 @@
 import {Suspense} from "react"
 import {useFlowBalance} from "../hooks/use-flow-balance.hook"
 import {useKibblesBalance} from "../hooks/use-kibbles-balance.hook"
+import {useKaratsBalance} from "../hooks/use-karats-balance.hook"
 import {useCurrentUser} from "../hooks/use-current-user.hook"
 import {IDLE} from "../global/constants"
 import {fmtKibbles} from "../util/fmt-kibbles"
+import {fmtKarats} from "../util/fmt-karats"
 import {
   Box,
   Button,
@@ -21,6 +23,7 @@ import {useInitialized} from "../hooks/use-initialized.hook"
 export function BalanceCluster({address}) {
   const flow = useFlowBalance(address)
   const kibbles = useKibblesBalance(address)
+  const karats = useKaratsBalance(address)
   const init = useInitialized(address)
   return (
     <Box mb="4">
@@ -49,6 +52,16 @@ export function BalanceCluster({address}) {
                 </Td>
               )}
             </Tr>
+            <Tr>
+              <Td>KARTA</Td>
+              {karats.status === IDLE ? (
+                <Td isNumeric>{fmtKarats(karats.balance)}</Td>
+              ) : (
+                <Td isNumeric>
+                  <Spinner size="sm" />
+                </Td>
+              )}
+            </Tr>
           </Tbody>
         </Table>
       </Box>
@@ -60,6 +73,15 @@ export function BalanceCluster({address}) {
             onClick={kibbles.mint}
           >
             Request Meowr Kibbles
+          </Button>
+        </Flex>
+        <Flex style={{margin: "5px"}}>
+          <Button
+            colorScheme="blue"
+            disabled={karats.status !== IDLE || !init.isInitialized}
+            onClick={karats.mint}
+          >
+            Request Karats(24K)
           </Button>
         </Flex>
       </Box>

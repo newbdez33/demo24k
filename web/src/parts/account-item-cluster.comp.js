@@ -13,6 +13,7 @@ import {
   Text,
   Image,
   HStack,
+  VStack,
 } from "@chakra-ui/react"
 
 export const ItemImage = ({typeID}) => {
@@ -55,6 +56,7 @@ export function AccountItemCluster({address, id}) {
         <>
           {!item.forSale ? (
             <Td isNumeric>
+              <VStack>
               <Button
                 colorScheme="blue"
                 size="sm"
@@ -66,6 +68,20 @@ export function AccountItemCluster({address, id}) {
                   <Text>List for 10 KIBBLE</Text>
                 </HStack>
               </Button>
+            
+              <Button
+                colorScheme="blue"
+                size="sm"
+                disabled={BUSY}
+                onClick={() => item.sell("10.0")}
+              >
+                <HStack>
+                  {BUSY && <Spinner mr="2" size="xs" />}{" "}
+                  <Text>List for 10 KARAT</Text>
+                </HStack>
+              </Button>
+              </VStack>
+              
             </Td>
           ) : (
             <Td isNumeric>

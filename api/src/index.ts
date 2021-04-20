@@ -8,6 +8,7 @@ import { getConfig } from "./config";
 import { BlockCursorService } from "./services/block-cursor";
 import { FlowService } from "./services/flow";
 import { KibblesService } from "./services/kibbles";
+import { KaratsService } from "./services/karats";
 import { KittyItemsService } from "./services/kitty-items";
 import { MarketService } from "./services/market";
 import { SaleOfferHandler } from "./workers/sale-offer-handler";
@@ -50,6 +51,12 @@ async function run() {
     config.minterAddress
   );
 
+  const karatsService = new KaratsService(
+    flowService,
+    config.fungibleTokenAddress,
+    config.minterAddress
+  );
+
   const kittyItemsService = new KittyItemsService(
     flowService,
     config.nonFungibleTokenAddress,
@@ -75,6 +82,7 @@ async function run() {
 
   const app = initApp(
     knexInstance,
+    karatsService,
     kibblesService,
     kittyItemsService,
     marketService

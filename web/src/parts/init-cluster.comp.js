@@ -41,6 +41,10 @@ export function InitCluster({address}) {
       <Box maxW="200px" borderWidth="1px" borderRadius="lg">
         <Table size="sm">
           <Tbody>
+          <Tr>
+              <Td>Karat</Td>
+              <Td>{fmtBool(init.Karat)}</Td>
+            </Tr>
             <Tr>
               <Td>Kibble</Td>
               <Td>{fmtBool(init.Kibble)}</Td>

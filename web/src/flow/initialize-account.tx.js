@@ -7,6 +7,7 @@ const CODE = cdc`
   import FungibleToken from 0xFungibleToken
   import NonFungibleToken from 0xNonFungibleToken
   import Kibble from 0xKibble
+  import Karat from 0xKarat
   import KittyItems from 0xKittyItems
   import KittyItemsMarket from 0xKittyItemsMarket
 
@@ -17,6 +18,18 @@ const CODE = cdc`
 
     let balance = getAccount(address)
       .getCapability<&Kibble.Vault{FungibleToken.Balance}>(Kibble.BalancePublicPath)
+      .check()
+
+    return receiver && balance
+  }
+
+  pub fun hasKarat(_ address: Address): Bool {
+    let receiver = getAccount(address)
+      .getCapability<&Karat.Vault{FungibleToken.Receiver}>(Karat.ReceiverPublicPath)
+      .check()
+
+    let balance = getAccount(address)
+      .getCapability<&Karat.Vault{FungibleToken.Balance}>(Karat.BalancePublicPath)
       .check()
 
     return receiver && balance
@@ -44,6 +57,16 @@ const CODE = cdc`
         acct.unlink(Kibble.BalancePublicPath)
         acct.link<&Kibble.Vault{FungibleToken.Receiver}>(Kibble.ReceiverPublicPath, target: Kibble.VaultStoragePath)
         acct.link<&Kibble.Vault{FungibleToken.Balance}>(Kibble.BalancePublicPath, target: Kibble.VaultStoragePath)
+      }
+
+      if !hasKarat(acct.address) {
+        if acct.borrow<&Karat.Vault>(from: Karat.VaultStoragePath) == nil {
+          acct.save(<-Karat.createEmptyVault(), to: Karat.VaultStoragePath)
+        }
+        acct.unlink(Karat.ReceiverPublicPath)
+        acct.unlink(Karat.BalancePublicPath)
+        acct.link<&Karat.Vault{FungibleToken.Receiver}>(Karat.ReceiverPublicPath, target: Karat.VaultStoragePath)
+        acct.link<&Karat.Vault{FungibleToken.Balance}>(Karat.BalancePublicPath, target: Karat.VaultStoragePath)
       }
 
       if !hasItems(acct.address) {

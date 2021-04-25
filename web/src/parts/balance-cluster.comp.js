@@ -53,7 +53,7 @@ export function BalanceCluster({address}) {
               )}
             </Tr>
             <Tr>
-              <Td>KARTA</Td>
+              <Td>KARAT</Td>
               {karats.status === IDLE ? (
                 <Td isNumeric>{fmtKarats(karats.balance)}</Td>
               ) : (

@@ -1,4 +1,5 @@
 import Kibble from "./Kibble.cdc"
+import Karat from "./Karat.cdc"
 import KittyItems from "./KittyItems.cdc"
 import FungibleToken from "./FungibleToken.cdc"
 import NonFungibleToken from "./NonFungibleToken.cdc"
@@ -46,6 +47,7 @@ pub contract KittyItemsMarket {
     pub event CollectionInsertedSaleOffer(
       itemID: UInt64, 
       typeID: UInt64, 
+      tokenID: UInt8,
       owner: Address, 
       price: UFix64
     )
@@ -62,6 +64,7 @@ pub contract KittyItemsMarket {
         pub let itemID: UInt64
         pub let typeID: UInt64
         pub let price: UFix64
+        pub let tokenID: UInt8
     }
 
     // SaleOffer
@@ -80,11 +83,16 @@ pub contract KittyItemsMarket {
         // The sale payment price.
         pub let price: UFix64
 
+        pub let tokenID: UInt8
+
         // The collection containing that ID.
         access(self) let sellerItemProvider: Capability<&KittyItems.Collection{NonFungibleToken.Provider}>
 
         // The Kibble vault that will receive that payment if teh sale completes successfully.
         access(self) let sellerPaymentReceiver: Capability<&Kibble.Vault{FungibleToken.Receiver}>
+
+        // Karat
+        access(self) let sellerKaratPaymentReceiver: Capability<&Karat.Vault{FungibleToken.Receiver}>
 
         // Called by a purchaser to accept the sale offer.
         // If they send the correct payment in Kibble, and if the item is still available,
@@ -101,7 +109,13 @@ pub contract KittyItemsMarket {
 
             self.saleCompleted = true
 
-            self.sellerPaymentReceiver.borrow()!.deposit(from: <-buyerPayment)
+//Only for demo case
+            if self.tokenID == 1 as UInt8 {
+                self.sellerPaymentReceiver.borrow()!.deposit(from: <-buyerPayment)
+            }else {
+                self.sellerKaratPaymentReceiver.borrow()!.deposit(from: <-buyerPayment)
+            }
+            
 
             let nft <- self.sellerItemProvider.borrow()!.withdraw(withdrawID: self.itemID)
             buyerCollection.deposit(token: <-nft)
@@ -122,9 +136,11 @@ pub contract KittyItemsMarket {
         //
         init(
             sellerItemProvider: Capability<&KittyItems.Collection{NonFungibleToken.Provider}>,
+            tokenID: UInt8,
             itemID: UInt64,
             typeID: UInt64,
             sellerPaymentReceiver: Capability<&Kibble.Vault{FungibleToken.Receiver}>,
+            sellerKaratPaymentReceiver: Capability<&Karat.Vault{FungibleToken.Receiver}>,
             price: UFix64
         ) {
             pre {
@@ -136,8 +152,10 @@ pub contract KittyItemsMarket {
 
             self.sellerItemProvider = sellerItemProvider
             self.itemID = itemID
+            self.tokenID = tokenID
 
             self.sellerPaymentReceiver = sellerPaymentReceiver
+            self.sellerKaratPaymentReceiver = sellerKaratPaymentReceiver
             self.price = price
             self.typeID = typeID
 
@@ -150,16 +168,20 @@ pub contract KittyItemsMarket {
     //
     pub fun createSaleOffer (
         sellerItemProvider: Capability<&KittyItems.Collection{NonFungibleToken.Provider}>,
+        tokenID: UInt8,
         itemID: UInt64,
         typeID: UInt64,
         sellerPaymentReceiver: Capability<&Kibble.Vault{FungibleToken.Receiver}>,
+        sellerKaratPaymentReceiver: Capability<&Karat.Vault{FungibleToken.Receiver}>,
         price: UFix64
     ): @SaleOffer {
         return <-create SaleOffer(
             sellerItemProvider: sellerItemProvider,
+            tokenID: tokenID,
             itemID: itemID,
             typeID: typeID,
             sellerPaymentReceiver: sellerPaymentReceiver,
+            sellerKaratPaymentReceiver: sellerKaratPaymentReceiver,
             price: price
         )
     }
@@ -212,6 +234,7 @@ pub contract KittyItemsMarket {
             let itemID: UInt64 = offer.itemID
             let typeID: UInt64 = offer.typeID
             let price: UFix64 = offer.price
+            let tokenID: UInt8 = offer.tokenID
 
             // add the new offer to the dictionary which removes the old one
             let oldOffer <- self.saleOffers[itemID] <- offer
@@ -220,6 +243,7 @@ pub contract KittyItemsMarket {
             emit CollectionInsertedSaleOffer(
               itemID: itemID,
               typeID: typeID,
+              tokenID: tokenID,
               owner: self.owner?.address!,
               price: price
             )

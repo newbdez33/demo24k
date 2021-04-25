@@ -107,7 +107,7 @@ class MarketService {
     });
   };
 
-  sell = (itemID: number, price: number) => {
+  sell = (itemID: number, price: number, tokenID: number) => {
     const authorization = this.flowService.authorizeMinter();
 
     const transaction = fs
@@ -132,6 +132,7 @@ class MarketService {
       args: [
         fcl.arg(itemID, t.UInt64),
         fcl.arg(price.toFixed(8).toString(), t.UFix64),
+        fcl.arg(tokenID, t.UInt64),
       ],
       authorizations: [authorization],
       payer: authorization,

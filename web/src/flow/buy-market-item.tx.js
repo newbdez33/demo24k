@@ -7,6 +7,7 @@ const CODE = fcl.cdc`
   import FungibleToken from 0xFungibleToken
   import NonFungibleToken from 0xNonFungibleToken
   import Kibble from 0xKibble
+  import Karat from 0xKarat
   import KittyItems from 0xKittyItems
   import KittyItemsMarket from 0xKittyItemsMarket
 
@@ -21,10 +22,18 @@ const CODE = fcl.cdc`
               .borrow() ?? panic("Could not borrow market collection from market address")
 
           let price = self.marketCollection.borrowSaleItem(itemID: itemID)!.price
+          let tokenID = self.marketCollection.borrowSaleItem(itemID: itemID)!.tokenID
 
-          let mainKibbleVault = acct.borrow<&Kibble.Vault>(from: Kibble.VaultStoragePath)
-              ?? panic("Cannot borrow Kibble vault from acct storage")
-          self.paymentVault <- mainKibbleVault.withdraw(amount: price)
+          if Int(tokenID) == 1 {
+            let mainKibbleVault = acct.borrow<&Kibble.Vault>(from: Kibble.VaultStoragePath)
+            ?? panic("Cannot borrow Kibble vault from acct storage")
+            self.paymentVault <- mainKibbleVault.withdraw(amount: price)
+          }else {
+            let mainKibbleVault = acct.borrow<&Karat.Vault>(from: Karat.VaultStoragePath)
+            ?? panic("Cannot borrow Karat vault from acct storage")
+            self.paymentVault <- mainKibbleVault.withdraw(amount: price)
+          }
+          
 
           self.kittyItemsCollection = acct.borrow<&KittyItems.Collection{NonFungibleToken.Receiver}>(
               from: KittyItems.CollectionStoragePath

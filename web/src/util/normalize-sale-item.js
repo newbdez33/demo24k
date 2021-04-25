@@ -6,6 +6,7 @@ export default function SaleOffer(saleItem) {
       type: saleItem.saleItemTypeID,
       owner: saleItem.saleItemOwner,
       price: saleItem.salePrice,
+      token: saleItem.saleTokenID,
     }
   )
 }

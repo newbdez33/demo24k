@@ -1,10 +1,11 @@
 import FungibleToken from "../../contracts/FungibleToken.cdc"
 import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import Kibble from "../../contracts/Kibble.cdc"
+import Karat from "../../contracts/Karat.cdc"
 import KittyItems from "../../contracts/KittyItems.cdc"
 import KittyItemsMarket from "../../contracts/KittyItemsMarket.cdc"
 
-transaction(itemID: UInt64, price: UFix64) {
+transaction(itemID: UInt64, price: UFix64, tokenID: UInt8) {
     let kibbleVault: Capability<&Kibble.Vault{FungibleToken.Receiver}>
     let kittyItemsCollection: Capability<&KittyItems.Collection{NonFungibleToken.Provider, KittyItems.KittyItemsCollectionPublic}>
     let marketCollection: &KittyItemsMarket.Collection
@@ -30,9 +31,11 @@ transaction(itemID: UInt64, price: UFix64) {
     execute {
         let offer <- KittyItemsMarket.createSaleOffer (
             sellerItemProvider: self.kittyItemsCollection,
+            tokenID: tokenID,
             itemID: itemID,
             typeID: self.kittyItemsCollection.borrow()!.borrowKittyItem(id: itemID)!.typeID,
             sellerPaymentReceiver: self.kibbleVault,
+            sellerKaratPaymentReceiver: self.karatValut,
             price: price
         )
         self.marketCollection.insert(offer: <-offer)

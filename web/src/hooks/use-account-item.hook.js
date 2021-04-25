@@ -41,9 +41,9 @@ export function useAccountItem(address, id) {
     status,
     forSale: marketItems.has(item),
     owned: sansPrefix(cu.addr) === sansPrefix(address),
-    async sell(price) {
+    async sell(price, tokenID) {
       await createSaleOffer(
-        {itemID: id, price: price},
+        {itemID: id, price: price, tokenID},
         {
           onStart() {
             setStatus(PROCESSING)

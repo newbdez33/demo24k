@@ -59,7 +59,7 @@ export function MarketItemCluster({address, id}) {
               >
                 <HStack>
                   {BUSY && <Spinner mr="2" size="xs" />}
-                  <Text>Buy</Text>
+                  <Text>Buy{item.tokenID}</Text>
                 </HStack>
               </Button>
             </Td>

@@ -61,7 +61,7 @@ export function AccountItemCluster({address, id}) {
                 colorScheme="blue"
                 size="sm"
                 disabled={BUSY}
-                onClick={() => item.sell("10.0")}
+                onClick={() => item.sell("10.0", "1")}
               >
                 <HStack>
                   {BUSY && <Spinner mr="2" size="xs" />}{" "}
@@ -73,7 +73,7 @@ export function AccountItemCluster({address, id}) {
                 colorScheme="blue"
                 size="sm"
                 disabled={BUSY}
-                onClick={() => item.sell("10.0")}
+                onClick={() => item.sell("10.0", "2")}
               >
                 <HStack>
                   {BUSY && <Spinner mr="2" size="xs" />}{" "}

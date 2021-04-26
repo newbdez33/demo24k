@@ -5,6 +5,7 @@ import {IDLE, PROCESSING} from "../global/constants"
 import {useCurrentUser} from "../hooks/use-current-user.hook"
 import {useAccountItems} from "../hooks/use-account-items.hook"
 import {useKibblesBalance} from "../hooks/use-kibbles-balance.hook"
+import {useKaratsBalance} from "../hooks/use-karats-balance.hook"
 import {fetchMarketItem} from "../flow/fetch-market-item.script"
 import {buyMarketItem} from "../flow/buy-market-item.tx"
 import {cancelMarketListing} from "../flow/cancel-market-listing.tx"
@@ -35,6 +36,7 @@ export function useMarketItem(address, id) {
   const ownerItems = useAccountItems(address)
   const cuItems = useAccountItems(cu.addr)
   const kibble = useKibblesBalance(cu.addr)
+  const karat = useKaratsBalance(cu.addr)
   const key = comp(address, id)
   const [item, setItem] = useRecoilState($state(key))
   const [status, setStatus] = useRecoilState($status(key))
@@ -61,6 +63,7 @@ export function useMarketItem(address, id) {
             }
             cuItems.refresh()
             kibble.refresh()
+            karat.refresh()
           },
           async onComplete() {
             setStatus(IDLE)
@@ -81,6 +84,7 @@ export function useMarketItem(address, id) {
           async onSuccess() {
             cuItems.refresh()
             kibble.refresh()
+            karat.refresh()
           },
           async onComplete() {
             setStatus(IDLE)

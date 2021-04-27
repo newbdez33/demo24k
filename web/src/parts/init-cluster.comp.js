@@ -50,11 +50,11 @@ export function InitCluster({address}) {
               <Td>{fmtBool(init.Kibble)}</Td>
             </Tr>
             <Tr>
-              <Td>Kitty Items</Td>
+              <Td>24K Demo</Td>
               <Td>{fmtBool(init.KittyItems)}</Td>
             </Tr>
             <Tr>
-              <Td>Kitty Items Market</Td>
+              <Td>24K Demo Market</Td>
               <Td>{fmtBool(init.KittyItemsMarket)}</Td>
             </Tr>
           </Tbody>

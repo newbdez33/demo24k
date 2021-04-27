@@ -80,7 +80,7 @@ export function InfoBanner({address}) {
     noKibble: {
       type: "info",
       title: "Get Kibble",
-      text: "You need Kibble to buy Kitty Items.",
+      text: "You need Kibble to buy Items.",
     },
   }
 

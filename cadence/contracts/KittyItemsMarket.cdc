@@ -323,7 +323,7 @@ pub contract KittyItemsMarket {
 
     init () {
         //FIXME: REMOVE SUFFIX BEFORE RELEASE
-        self.CollectionStoragePath = /storage/kittyItemsMarketCollection002
-        self.CollectionPublicPath = /public/kittyItemsMarketCollection002
+        self.CollectionStoragePath = /storage/kittyItemsMarketCollection003
+        self.CollectionPublicPath = /public/kittyItemsMarketCollection003
     }
 }

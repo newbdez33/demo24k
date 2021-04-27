@@ -88,7 +88,7 @@ const CODE = cdc`
 
       if !hasMarket(acct.address) {
         if acct.borrow<&KittyItemsMarket.Collection>(from: KittyItemsMarket.CollectionStoragePath) == nil {
-          if let oldToken <- acct.load<@NonFungibleToken.Collection>(from: KittyItemsMarket.CollectionStoragePath) {
+          if let oldToken <- acct.load<@KittyItemsMarket.Collection>(from: KittyItemsMarket.CollectionStoragePath) {
             destroy oldToken
           }
           acct.save(<-KittyItemsMarket.createEmptyCollection(), to: KittyItemsMarket.CollectionStoragePath)

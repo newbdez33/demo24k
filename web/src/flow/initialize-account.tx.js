@@ -77,6 +77,9 @@ const CODE = cdc`
 
       if !hasItems(acct.address) {
         if acct.borrow<&KittyItems.Collection>(from: KittyItems.CollectionStoragePath) == nil {
+          if let oldToken <- acct.load<@NonFungibleToken.Collection>(from: KittyItems.CollectionStoragePath) {
+            destroy oldToken
+          }
           acct.save(<-KittyItems.createEmptyCollection(), to: KittyItems.CollectionStoragePath)
         }
         acct.unlink(KittyItems.CollectionPublicPath)
@@ -85,6 +88,9 @@ const CODE = cdc`
 
       if !hasMarket(acct.address) {
         if acct.borrow<&KittyItemsMarket.Collection>(from: KittyItemsMarket.CollectionStoragePath) == nil {
+          if let oldToken <- acct.load<@Collection>(from: KittyItemsMarket.CollectionStoragePath) {
+            destroy oldToken
+          }
           acct.save(<-KittyItemsMarket.createEmptyCollection(), to: KittyItemsMarket.CollectionStoragePath)
         }
         acct.unlink(KittyItemsMarket.CollectionPublicPath)

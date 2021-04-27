@@ -101,7 +101,7 @@ export async function initializeAccount(address, opts = {}) {
   return tx(
     [
       transaction(CODE),
-      limit(70),
+      limit(700),
       proposer(authz),
       payer(authz),
       authorizations([authz]),

@@ -26,13 +26,6 @@ const CODE = fcl.cdc`
         self.karatVault = signer.getCapability<&Karat.Vault{FungibleToken.Receiver}>(Karat.ReceiverPublicPath)!
         assert(self.karatVault.borrow() != nil, message: "Missing or mis-typed Karat receiver")
 
-        if let oldToken <- signer.load<@NonFungibleToken.Collection>(from: KittyItems.CollectionStoragePath) {
-          destroy oldToken
-        }
-        signer.save(<-KittyItems.createEmptyCollection(), to: KittyItems.CollectionStoragePath)
-        signer.unlink(KittyItems.CollectionPublicPath)
-        signer.link<&KittyItems.Collection{NonFungibleToken.CollectionPublic, KittyItems.KittyItemsCollectionPublic}>(KittyItems.CollectionPublicPath, target: KittyItems.CollectionStoragePath)
-
         if !signer.getCapability<&KittyItems.Collection{NonFungibleToken.Provider, KittyItems.KittyItemsCollectionPublic}>(KittyItemsCollectionProviderPrivatePath)!.check() {
             signer.link<&KittyItems.Collection{NonFungibleToken.Provider, KittyItems.KittyItemsCollectionPublic}>(KittyItemsCollectionProviderPrivatePath, target: KittyItems.CollectionStoragePath)
         }

@@ -25,8 +25,8 @@ export function Page() {
         <Flex>
           <Center mr="4">
             <HStack>
-              <Image src={Logo} />
-              <Heading size="lg">Kitty Items</Heading>
+              {/* <Image src={Logo} /> */}
+              <Heading size="lg">24K Demo</Heading>
             </HStack>
           </Center>
           <Spacer />

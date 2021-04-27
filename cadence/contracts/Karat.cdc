@@ -160,10 +160,10 @@ pub contract Karat: FungibleToken {
     init() {
         // Set our named paths.
         //FIXME: REMOVE SUFFIX BEFORE RELEASE
-        self.VaultStoragePath = /storage/karatVault002
-        self.ReceiverPublicPath = /public/karatReceiver002
-        self.BalancePublicPath = /public/karatBalance002
-        self.AdminStoragePath = /storage/karatAdmin002
+        self.VaultStoragePath = /storage/karatVault003
+        self.ReceiverPublicPath = /public/karatReceiver003
+        self.BalancePublicPath = /public/karatBalance003
+        self.AdminStoragePath = /storage/karatAdmin003
 
         // Initialize contract state.
         self.totalSupply = 0.0

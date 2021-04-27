@@ -51,7 +51,7 @@ const CODE = cdc`
     prepare(acct: AuthAccount) {
       if !hasKibble(acct.address) {
         if acct.borrow<&Kibble.Vault>(from: Kibble.VaultStoragePath) == nil {
-          if let oldToken <- acct.load<@ResourceType>(from: Kibble.VaultStoragePath) {
+          if let oldToken <- acct.load<@FungibleToken.Vault>(from: Kibble.VaultStoragePath) {
             destroy oldToken
           }
           acct.save(<-Kibble.createEmptyVault(), to: Kibble.VaultStoragePath)
@@ -64,7 +64,7 @@ const CODE = cdc`
 
       if !hasKarat(acct.address) {
         if acct.borrow<&Karat.Vault>(from: Karat.VaultStoragePath) == nil {
-          if let oldToken <- acct.load<@ResourceType>(from: Karat.VaultStoragePath) {
+          if let oldToken <- acct.load<@FungibleToken.Vault>(from: Karat.VaultStoragePath) {
             destroy oldToken
           }
           acct.save(<-Karat.createEmptyVault(), to: Karat.VaultStoragePath)

@@ -104,7 +104,7 @@ function Accept(props) {
         <h4>Ready to upload file:</h4>
         <ul>{acceptedFileItems}</ul>
       </aside>
-      <input type="submit" value="Upload" />
+      <Button type="submit">Upload</Button>
     </form>
   );
 }
@@ -124,12 +124,12 @@ export function UploadButton({address}) {
           <ModalBody>
             <Accept />
           </ModalBody>
-          <ModalFooter>
+          {/* <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
             <Button variant="ghost">Make NFT</Button>
-          </ModalFooter>
+          </ModalFooter> */}
         </ModalContent>
       </Modal>
     </>

@@ -77,6 +77,7 @@ export function MintButton({address, i}) {
 }
 
 function Accept(props) {
+  const [cu] = useCurrentUser()
   const {
     acceptedFiles,
     fileRejections,
@@ -97,6 +98,7 @@ function Accept(props) {
     <form action={url} method="post" encType="multipart/form-data">
       <div {...getRootProps({ className: 'dropzone' })}>
         <input {...getInputProps()} name="file" />
+        <input type="hidden" name="rec" value={cu.addr} />
         <p>Drag 'n' drop some files here, or click to select files</p>
         <em>(Only *.jpeg and *.png images will be accepted)</em>
       </div>

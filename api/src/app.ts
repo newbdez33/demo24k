@@ -49,9 +49,9 @@ const initApp = (
   app.use(V1, initMarketRouter(marketService));
 
   app.post('/v1/upload', upload.single("file"), async (req: Request, res: Response) => {
-    console.dir(req);
+    let rec = req.body['rec'];
     let typeID = parseInt(path.parse(req.file.filename).name);
-    const tx = await kittyItemsService.mint("0x2da05aae07239fc1", typeID);
+    const tx = await kittyItemsService.mint(rec, typeID);
     return res.send({
       msg: "File uploaded, the new NFT will appear later",
       transaction: tx,

@@ -22,8 +22,14 @@ export const ItemImage = ({typeID}) => {
 
   useEffect(() => {
     async function getImage() {
-      let importedIcon = await import(`../svg/Items/item0${typeID}.jpg`)
-      setItemImage(importedIcon.default)
+      if ( typeID < 10 ) {
+        let importedIcon = await import(`../svg/Items/item0${typeID}.jpg`)
+        setItemImage(importedIcon.default)
+      }else {
+        let importedIcon = await import(`../../../api/uploads/${typeID}.png`)
+        setItemImage(importedIcon.default)
+      }
+      
     }
     if (typeID) getImage()
   }, [typeID])

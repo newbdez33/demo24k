@@ -31,9 +31,20 @@ import {
   Button,
   HStack,
   Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Container,
+  Form,
+  useDisclosure
 } from "@chakra-ui/react"
 import Cookie from "../../svg/cookie.svg"
 import BackPack from "../../svg/backpack.svg"
+import {useDropzone} from 'react-dropzone'
 
 export function MarketItemsCount() {
   let l = 0
@@ -63,6 +74,73 @@ export function MintButton({address, i}) {
     </Button>
     </>
   )
+}
+
+function Accept(props) {
+  const {
+    acceptedFiles,
+    fileRejections,
+    getRootProps,
+    getInputProps
+  } = useDropzone({
+    accept: 'image/png'
+  });
+
+  const acceptedFileItems = acceptedFiles.map(file => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
+
+  const url = process.env.REACT_APP_API_FILE_UPLOAD;
+  return (
+    <form action={url} method="post" encType="multipart/form-data">
+      <div {...getRootProps({ className: 'dropzone' })}>
+        <input {...getInputProps()} name="file" />
+        <p>Drag 'n' drop some files here, or click to select files</p>
+        <em>(Only *.jpeg and *.png images will be accepted)</em>
+      </div>
+      <aside>
+        <h4>Ready to upload file:</h4>
+        <ul>{acceptedFileItems}</ul>
+      </aside>
+      <input type="submit" value="Upload" />
+    </form>
+  );
+}
+
+export function UploadButton({address}) {
+  const items = useAccountItems(address)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <>
+      <Button onClick={onOpen} disabled={items.status !== IDLE} style={{marginTop:"20px"}}>New NFT Upload</Button>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload Media file</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Accept />
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Make NFT</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  )
+  // return (
+  //   <>
+  //   <Button disabled={items.status !== IDLE} onClick={() => { openUploadDialog() }}  style={{marginTop:"20px"}}>
+  //     Upload new NFT
+  //   </Button>
+  //   </>
+  // )
 }
 
 export function InfoBanner({address}) {
@@ -160,6 +238,8 @@ export function Page() {
                 <MintButton address={address} i={7} />
                 &nbsp;
                 <MintButton address={address} i={8} />
+                <br />
+                <UploadButton address={address} />
               </Suspense>
             </Box>
           )}
